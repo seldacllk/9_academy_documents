@@ -1,4 +1,4 @@
-| Dosya Adı | Dosya Linkİ|
+| Dosya Adı | Dosya Linki|
 |   ---  |          ---            |
 | SRS Dosyası |[SRS dosyasını görüntüleyin]|
 | ERD Dosyası |[ERD dosyasını görüntüleyin](https://drive.google.com/file/d/1VhqCzVvM6SdZwW1jm_T3nyLdFik8PYtw/view?usp=sharing)|
