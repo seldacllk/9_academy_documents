@@ -2,3 +2,5 @@
 SQL Workshops: https://github.com/dilaragebess/sql_etiya_1/tree/main 
 
 E-commerce ERD Workshop with pair 1: https://lucid.app/lucidchart/aee41a2a-580f-40ba-b0b1-43790fb5c9bc/edit?invitationId=inv_edc53b7c-66aa-4166-b9a2-38c65cf88a18&page=0_0#
+
+Data Modelling Workshop with pair 1: https://etiyacorp-my.sharepoint.com/:x:/r/personal/bade_kara_etiya_com/_layouts/15/Doc.aspx?sourcedoc=%7B34FDE18B-6E4D-4FD7-8850-7A4CDD3D313B%7D&file=Book1.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1
