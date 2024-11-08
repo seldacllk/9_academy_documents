@@ -1,0 +1,262 @@
+1. Product isimlerini (`ProductName`) ve birim başına miktar (`QuantityPerUnit`) değerlerini almak için sorgu yazın.
+    select productname, quantityperunit FROM Products 
+
+2. Ürün Numaralarını (`ProductID`) ve Product isimlerini (`ProductName`) değerlerini almak için sorgu yazın. Artık satılmayan ürünleri (`Discontinued`) filtreleyiniz.
+    SELECT product_id, product_name, discontinued
+    FROM products
+    WHERE discontinued = 1
+
+3. Durdurulan Ürün Listesini, Ürün kimliği ve ismi (`ProductID`, `ProductName`) değerleriyle almak için bir sorgu yazın.
+
+4. Ürünlerin maliyeti 20'dan az olan Ürün listesini (`ProductID`, `ProductName`, `UnitPrice`) almak için bir sorgu yazın.
+    SELECT `ProductID`, `ProductName`, `UnitPrice` from Products
+    WHERE unitprice < 20
+
+5. Ürünlerin maliyetinin 15 ile 25 arasında olduğu Ürün listesini (`ProductID`, `ProductName`, `UnitPrice`) almak için bir sorgu yazın.
+    SELECT `ProductID`, `ProductName`, `UnitPrice` from Products
+    WHERE unitprice BETWEEN 15 and 25 
+
+6. Ürün listesinin (`ProductName`, `UnitsOnOrder`, `UnitsInStock`) stoğun siparişteki miktardan az olduğunu almak için bir sorgu yazın.
+    SELECT product_name, units_on_order, units_in_stock
+    FROM products
+    WHERE units_in_stock < units_on_order 
+
+7. İsmi `a` ile başlayan ürünleri listeleyeniz.
+    SELECT * from Products where productname like 'A%'
+
+8. İsmi `i` ile biten ürünleri listeleyeniz.
+    SELECT * from Products where productname like '%i'
+
+9. Ürün birim fiyatlarına %18’lik KDV ekleyerek listesini almak (ProductName, UnitPrice, UnitPriceKDV) için bir sorgu yazın.
+    select productname as ProductName, unitprice as UnitPrice, unitprice*1.18 as UnitPriceKDV from Products
+
+10. Fiyatı 30 dan büyük kaç ürün var?
+    select COUNT(*) FROM Products WHERE unitprice > 30
+
+11. Ürünlerin adını tamamen küçültüp fiyat sırasına göre tersten listele,
+    select LOWER(productname) AS ProductName, UnitPrice  FROM Products
+    ORDER BY unitprice DESC
+
+12. Çalışanların ad ve soyadlarını yanyana gelecek şekilde yazdır
+    SELECT firstname || ' ' || lastname FROM Employees
+
+13. Region alanı NULL olan kaç tedarikçim var?
+    SELECT COUNT(*) AS Null_Region
+    FROM suppliers
+    WHERE region IS NULL 
+
+14. a.Null olmayanlar?
+    SELECT * FROM suppliers
+    WHERE region IS NOT NULL
+
+15. Ürün adlarının hepsinin soluna TR koy ve büyültüp olarak ekrana yazdır.
+    SELECT CONCAT('TR ', UPPER(product_name)) FROM products; 
+
+16. a.Fiyatı 20den küçük ürünlerin adının başına TR ekle
+    SELECT CONCAT('TR ', UPPER(product_name))
+    FROM products
+    WHERE unit_price < 20 
+
+17. En pahalı ürün listesini (`ProductName` , `UnitPrice`) almak için bir sorgu yazın.
+
+18. En pahalı on ürünün Ürün listesini (`ProductName` , `UnitPrice`) almak için bir sorgu yazın.
+    SELECT product_name, unit_price
+    FROM products
+    ORDER BY unit_price DESC LIMIT 10;
+
+19. Ürünlerin ortalama fiyatının üzerindeki Ürün listesini (`ProductName` , `UnitPrice`) almak için bir sorgu yazın.
+20. Stokta olan ürünler satıldığında elde edilen miktar ne kadardır.
+21. Mevcut ve Durdurulan ürünlerin sayılarını almak için bir sorgu yazın.
+22. Ürünleri kategori isimleriyle birlikte almak için bir sorgu yazın.
+23. Ürünlerin kategorilerine göre fiyat ortalamasını almak için bir sorgu yazın.
+24. En pahalı ürünümün adı, fiyatı ve kategorisin adı nedir?
+    SELECT p.productname, p.unitprice, c.CategoryName from Products p
+    JOIN Categories c on p.CategoryID = c.CategoryID
+    order by unitprice DESC 
+    LIMIT 1
+
+25. En çok satılan ürününün adı, kategorisinin adı ve tedarikçisinin adı
+    SELECT c.category_id, c.category_name, od.product_id, p.product_name, SUM(quantity) AS totalQ
+    FROM order_details od
+    JOIN products p ON p.product_id = od.product_id
+    JOIN categories c ON c.category_id = p.category_id 
+    GROUP BY od.product_id, c.category_id, c.category_name, p.product_name 
+    ORDER BY totalQ DESC
+    LIMIT 1
+
+
+26. Stokta bulunmayan ürünlerin ürün listesiyle birlikte tedarikçilerin ismi ve iletişim numarasını (`ProductID`, `ProductName`, `CompanyName`, `Phone`) almak için bir sorgu yazın.
+    SELECT p.product_id, p.product_name, s.company_name, s.phone
+    FROM products p
+    LEFT JOIN suppliers s ON p.supplier_id = s.supplier_id
+    WHERE p.units_in_stock = 0
+
+27. 1998 yılı mart ayındaki siparişlerimin adresi, siparişi alan çalışanın adı, çalışanın soyadı
+28. 1997 yılı şubat ayında kaç siparişim var?
+    SELECT COUNT(order_id) AS March_Total_Order
+    FROM orders
+    WHERE date_part('year', order_date) = 1997
+    AND date_part('month', order_date) = 02
+
+29. London şehrinden 1998 yılında kaç siparişim var?
+30. 1997 yılında sipariş veren müşterilerimin contactname ve telefon numarası
+31. Taşıma ücreti 40 üzeri olan siparişlerim
+32. Taşıma ücreti 40 ve üzeri olan siparişlerimin şehri, müşterisinin adı
+33. 1997 yılında verilen siparişlerin tarihi, şehri, çalışan adı -soyadı ( ad soyad birleşik olacak ve büyük harf),
+34. 1997 yılında sipariş veren müşterilerin contactname i, ve telefon numaraları ( telefon formatı 2223322 gibi olmalı )
+35. Sipariş tarihi, müşteri contact name, çalışan ad, çalışan soyad
+36. Geciken siparişlerim?
+    SELECT order_id, required_date, shipped_date, (shipped_date - required_date) AS Delay_Days
+    FROM orders
+    WHERE required_date < shipped_date
+
+37. Geciken siparişlerimin tarihi, müşterisinin adı
+38. 10248 nolu siparişte satılan ürünlerin adı, kategorisinin adı, adedi
+    SELECT p.product_name, c.category_name, od.quantity FROM order_details AS od
+    INNER JOIN products AS p ON p.product_id = od.product_id 
+    INNER JOIN categories AS c ON c.category_id = p.category_id
+    WHERE order_id = 10248
+
+39. 10248 nolu siparişin ürünlerinin adı , tedarikçi adı
+    SELECT p.product_name, s.company_name AS Supplier_Company, s.contact_name FROM order_details AS od
+    INNER JOIN products AS p ON p.product_id = od.product_id 
+    INNER JOIN suppliers AS s ON s.supplier_id = p.supplier_id
+    WHERE order_id = 10248
+
+40. 3 numaralı ID ye sahip çalışanın 1997 yılında sattığı ürünlerin adı ve adeti
+    SELECT o.employee_id, p.product_name, od.quantity
+    FROM order_details AS od
+    JOIN products AS p ON p.product_id = od.product_id
+    JOIN orders AS o ON o.order_id = od.order_id
+    WHERE o.employee_id = 3
+    AND date_part('year', order_date) = 1997
+
+41. 1997 yılında bir defasinda en çok satış yapan çalışanımın ID,Ad soyad
+42. 1997 yılında en çok satış yapan çalışanımın ID,Ad soyad ****
+43. En pahalı ürünümün adı,fiyatı ve kategorisin adı nedir?
+44. Siparişi alan personelin adı,soyadı, sipariş tarihi, sipariş ID. Sıralama sipariş tarihine göre
+45. SON 5 siparişimin ortalama fiyatı ve orderid nedir?
+46. Ocak ayında satılan ürünlerimin adı ve kategorisinin adı ve toplam satış miktarı nedir?
+47. Ortalama satış miktarımın üzerindeki satışlarım nelerdir?
+
+48. En çok satılan ürünümün(adet bazında) adı, kategorisinin adı ve tedarikçisinin adı
+    SELECT productid, COUNT(*) as orderCount FROM "Order Details" 
+    GROUP by productid
+    order BY OrderCount DESC
+    LIMIT 1
+49. Kaç ülkeden müşterim var
+    SELECT COUNT(DISTINCT country) FROM Customers
+50. 3 numaralı ID ye sahip çalışan (employee) son Ocak ayından BUGÜNE toplamda ne kadarlık ürün sattı?
+51. 10248 nolu siparişte satılan ürünlerin adı, kategorisinin adı, adedi
+52. 10248 nolu siparişin ürünlerinin adı , tedarikçi adı
+53. 3 numaralı ID ye sahip çalışanın 1997 yılında sattığı ürünlerin adı ve adeti
+54. 1997 yılında bir defasinda en çok satış yapan çalışanımın ID,Ad soyad
+55. 1997 yılında en çok satış yapan çalışanımın ID,Ad soyad ****
+56. En pahalı ürünümün adı,fiyatı ve kategorisin adı nedir?
+57. Siparişi alan personelin adı,soyadı, sipariş tarihi, sipariş ID. Sıralama sipariş tarihine göre
+58. SON 5 siparişimin ortalama fiyatı ve orderid nedir?
+59. Ocak ayında satılan ürünlerimin adı ve kategorisinin adı ve toplam satış miktarı nedir?
+60. Ortalama satış miktarımın üzerindeki satışlarım nelerdir?
+61. En çok satılan ürünümün(adet bazında) adı, kategorisinin adı ve tedarikçisinin adı
+62. Kaç ülkeden müşterim var
+63. Hangi ülkeden kaç müşterimiz var
+64. 3 numaralı ID ye sahip çalışan (employee) son Ocak ayından BUGÜNE toplamda ne kadarlık ürün sattı?
+65. 10 numaralı ID ye sahip ürünümden son 3 ayda ne kadarlık ciro sağladım?
+66. Hangi çalışan şimdiye kadar toplam kaç sipariş almış..?
+67. 91 müşterim var. Sadece 89’u sipariş vermiş. Sipariş vermeyen 2 kişiyi bulun
+68. Brazil’de bulunan müşterilerin Şirket Adı, TemsilciAdi, Adres, Şehir, Ülke bilgileri
+69. Brezilya’da olmayan müşteriler
+70. Ülkesi (Country) YA Spain, Ya France, Ya da Germany olan müşteriler
+71. Faks numarasını bilmediğim müşteriler
+72. Londra’da ya da Paris’de bulunan müşterilerim
+73. Hem Mexico D.F’da ikamet eden HEM DE ContactTitle bilgisi ‘owner’ olan müşteriler
+74. C ile başlayan ürünlerimin isimleri ve fiyatları
+75. Adı (FirstName) ‘A’ harfiyle başlayan çalışanların (Employees); Ad, Soyad ve Doğum Tarihleri
+76. İsminde ‘RESTAURANT’ geçen müşterilerimin şirket adları
+77. 50$ ile 100$ arasında bulunan tüm ürünlerin adları ve fiyatları
+78. 1 temmuz 1996 ile 31 Aralık 1996 tarihleri arasındaki siparişlerin (Orders), SiparişID (OrderID) ve SiparişTarihi (OrderDate) bilgileri
+79. Ülkesi (Country) YA Spain, Ya France, Ya da Germany olan müşteriler
+    SELECT * FROM Customers 
+    WHERE country IN ('Spain', 'France', 'Germany'),
+
+80. Faks numarasını bilmediğim müşteriler
+81. Müşterilerimi ülkeye göre sıralıyorum:
+
+82. Ürünlerimi en pahalıdan en ucuza doğru sıralama, sonuç olarak ürün adı ve fiyatını istiyoruz
+    select productname, unitprice from Products
+    order by unitprice DESC
+
+83. Ürünlerimi en pahalıdan en ucuza doğru sıralasın, ama stoklarını küçükten-büyüğe doğru göstersin sonuç olarak ürün adı ve fiyatını istiyoruz
+84. 1 Numaralı kategoride kaç ürün vardır..?
+85. Kaç farklı ülkeye ihracat yapıyorum..?
+86. a.Bu ülkeler hangileri..?
+87. En Pahalı 5 ürün
+88. ALFKI CustomerID’sine sahip müşterimin sipariş sayısı..?
+89. Ürünlerimin toplam maliyeti
+90. Şirketim, şimdiye kadar ne kadar ciro yapmış..?
+91. Ortalama Ürün Fiyatım
+92. En Pahalı Ürünün Adı
+93. En az kazandıran sipariş
+94. Müşterilerimin içinde en uzun isimli müşteri
+95. Çalışanlarımın Ad, Soyad ve Yaşları
+96. Hangi üründen toplam kaç adet alınmış..?
+97. Hangi siparişte toplam ne kadar kazanmışım..?
+
+98. Hangi kategoride toplam kaç adet ürün bulunuyor..?
+    SELECT p.category_id, c.category_name, COUNT(p.product_id)
+    FROM products AS p
+    JOIN categories AS c ON c.category_id = p.category_id
+    GROUP BY p.category_id, c.category_name
+    ORDER BY p.category_id
+
+99. 1000 Adetten fazla satılan ürünler?
+    SELECT product_id, SUM(quantity) AS Total
+    FROM order_details
+    GROUP BY product_id
+    HAVING SUM(quantity) >= 1000
+    ORDER BY Total
+
+100. Hangi Müşterilerim hiç sipariş vermemiş..?
+    SELECT Customers.CustomerID, Customers.CompanyName
+    FROM Customers
+    LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+    WHERE Orders.OrderID IS NULL;
+
+101. Hangi tedarikçi hangi ürünü sağlıyor ?
+102. Hangi sipariş hangi kargo şirketi ile ne zaman gönderilmiş..?
+103. Hangi siparişi hangi müşteri verir..?
+    SELECT Orders.OrderID, Customers.CustomerID, Customers.CompanyName
+    FROM Orders
+    JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+104. Hangi çalışan, toplam kaç sipariş almış..?
+105. En fazla siparişi kim almış..?
+106. Hangi siparişi, hangi çalışan, hangi müşteri vermiştir..?
+107. Hangi ürün, hangi kategoride bulunmaktadır..? Bu ürünü kim tedarik etmektedir..?
+
+108. Hangi siparişi hangi müşteri vermiş, hangi çalışan almış, hangi tarihte, hangi kargo şirketi tarafından gönderilmiş hangi üründen kaç adet alınmış, hangi fiyattan alınmış, ürün hangi kategorideymiş bu ürünü hangi tedarikçi sağlamış
+
+109. Altında ürün bulunmayan kategoriler
+
+110. Manager ünvanına sahip tüm müşterileri listeleyiniz.
+111. FR ile başlayan 5 karekter olan tüm müşterileri listeleyiniz.
+112. (171) alan kodlu telefon numarasına sahip müşterileri listeleyiniz.
+113. BirimdekiMiktar alanında boxes geçen tüm ürünleri listeleyiniz.
+114. Fransa ve Almanyadaki (France,Germany) Müdürlerin (Manager) Adını ve Telefonunu listeleyiniz.(MusteriAdi,Telefon)
+115. En yüksek birim fiyata sahip 10 ürünü listeleyiniz.
+116. Müşterileri ülke ve şehir bilgisine göre sıralayıp listeleyiniz.
+117. Personellerin ad,soyad ve yaş bilgilerini listeleyiniz.
+118. 35 gün içinde sevk edilmeyen satışları listeleyiniz.
+119. Birim fiyatı en yüksek olan ürünün kategori adını listeleyiniz. (Alt Sorgu)
+    SELECT categoryname from Categories 
+    where categoryid = (SELECT categoryid from Products
+                       order by unitprice DESC
+                       LIMIT 1) 
+120. Kategori adında 'on' geçen kategorilerin ürünlerini listeleyiniz. (Alt Sorgu)
+    SELECT * from Products where categoryid = (select categoryid from Categories where categoryname like '%on%')
+
+121. Konbu adlı üründen kaç adet satılmıştır.
+122. Japonyadan kaç farklı ürün tedarik edilmektedir.
+123. 1997 yılında yapılmış satışların en yüksek, en düşük ve ortalama nakliye ücretlisi ne kadardır?
+124. Faks numarası olan tüm müşterileri listeleyiniz.
+125. 1996-07-16 ile 1996-07-30 arasında sevk edilen satışları listeleyiniz. 

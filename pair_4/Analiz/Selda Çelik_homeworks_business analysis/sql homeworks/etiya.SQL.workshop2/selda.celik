@@ -1,0 +1,127 @@
+-1--Her kategorideki (CategoryID) ürün sayısını gösteren bir sorgu yazın.
+SELECT * from Products
+GROUP by categoryid
+having COUNT(productid)
+
+---Birim fiyatı en yüksek 5 ürünü listeleyin.
+SELECT * FROM Products
+ORDER BY unitprice DESC
+LIMIT 5
+
+--Her tedarikçinin sattığı ürünlerin ortalama fiyatını listeleyin.
+SELECT supplierid, AVG(unitprice) FROM Products
+GROUP by supplierid
+
+--"Products" tablosunda birim fiyatı 100'den büyük olan ürünlerin kategorilerini ve bu kategorilerdeki ortalama fiyatı listeleyin.
+SELECT * FROM Products
+WHERE unitprice > 100
+GROUP by categoryid
+HAVING AVG(unitprice)
+
+--5-"OrderDetails" tablosunda birim fiyat ve miktar çarpımıyla toplam satış değeri 1000'den fazla olan siparişleri listeleyin.
+SELECT * FROM 'Order Details' 
+WHERE unitprice * quantity - (unitprice * quantity * discount) > 1000
+
+--En son sevk edilen 10 siparişi listeleyin.
+SELECT * FROM 'Order Details'
+ORDER BY productid DESC
+LIMIT 10
+
+--"Products" tablosundaki ürünlerin ortalama fiyatını hesaplayın.
+SELECT AVG(unitprice) FROM Products
+
+--"Products" tablosunda fiyatı 50’den büyük olan ürünlerin toplam stok miktarını hesaplayın.
+SELECT * FROM Products
+WHERE unitprice > 50
+GROUP BY unitprice
+HAVING COUNT(unitsinstock)
+
+---"Orders" tablosundaki en eski sipariş tarihini bulun
+SELECT * FROM Orders
+ORDER BY orderdate ASC
+LIMIT 1
+
+--10)"Employees" tablosundaki çalışanların kaç yıl önce işe başladıklarını gösteren bir sorgu yazın.
+SELECT employeeid 
+   YEAR(CURRENT_DATE()) - YEAR(hiredate)
+   FROM Employees
+
+--"OrderDetails" tablosundaki her bir sipariş için, birim fiyatın toplamını yuvarlayarak (ROUND) hesaplayın.
+SELECT orderid,
+ROUND(SUM(unitprice)) FROM 'OrdersDetails'
+      group by orderid
+
+-"Products" tablosunda stoktaki (UnitsInStock) ürün sayısını gösteren bir COUNT sorgusu yazın.
+SELECT * FROM Products
+GROUP BY unitprice
+HAVING COUNT(unitsinstock)
+
+--"Products" tablosundaki en düşük ve en yüksek fiyatları hesaplayın.
+SELECT MIN(unitprice) AS 'EN DÜŞÜK', MAX(unitprice) AS 'EN YÜKSEK' FROM Products
+
+--"Orders" tablosunda her yıl kaç sipariş alındığını listeleyin (YEAR() fonksiyonunu kullanarak).
+SELECT 
+    YEAR(OrderDate) AS Year, 
+    COUNT(*) AS OrderCount 
+FROM Orders 
+GROUP BY YEAR(OrderDate)
+
+--15)Employees" tablosundaki çalışanların tam adını (FirstName + LastName) birleştirerek gösterin.
+select concat(firstname, ' ', lastname) as [Tam Ad] from Employees
+order by [Tam Ad]
+
+--"Customers" tablosundaki şehir adlarının uzunluğunu (LENGTH) hesaplayın.
+SELECT LENGTH(city)
+FROM Customers
+
+--"Products" tablosundaki her ürünün fiyatını iki ondalık basamağa yuvarlayarak gösterin.
+SELECT productid, productname,
+ROUND(unitprice, 2) as 'ondalık basamak'
+from Products
+
+--"Orders" tablosundaki tüm siparişlerin toplam sayısını bulun.
+select COUNT(*) from Orders
+
+--"Products" tablosunda her kategorideki (CategoryID) ürünlerin ortalama fiyatını (AVG) hesaplayın.
+SELECT categoryid, AVG(unitprice)     
+FROM Products
+GROUP BY categoryid
+
+--20)"Orders" tablosunda sevk tarihi (ShippedDate) boş olan siparişlerin yüzdesini (COUNT ve toplam sipariş sayısını kullanarak) hesaplayın.
+SELECT
+    (COUNT(CASE WHEN shippeddate ISNULL THEN 1
+          END) / COUNT(*)) * 100
+FROM Orders  
+
+--"Products" tablosundaki en pahalı ürünün fiyatını bulun ve bir fonksiyon kullanarak fiyatı 10% artırın.
+CREATE FUNCTION IncreasePrice(price REAL) RETURNS REAL AS
+BEGIN
+    RETURN price * 1.10;
+END;
+SELECT IncreasePrice(MAX(Price)) AS NewPrice FROM Products;
+
+--"Products" tablosundaki ürün adlarının ilk 3 karakterini gösterin (SUBSTRING).
+SELECT SUBSTRING(productname, 1, 3) 
+FROM Products
+
+--"Orders" tablosunda verilen siparişlerin yıl ve ay bazında kaç sipariş alındığını hesaplayın (YEAR ve MONTH fonksiyonları).
+  SELECT 
+   STRFTIME('%Y', 'orderdate'),
+    STRFTIME('%M', 'orderdate'),
+    COUNT(*) AS OrderCount 
+FROM Orders 
+GROUP BY 
+   STRFTIME('%Y', 'orderdate'),
+    STRFTIME('%M', 'orderdate')
+
+---"OrderDetails" tablosunda toplam sipariş değerini (UnitPrice * Quantity) hesaplayıp, bu değeri iki ondalık basamağa yuvarlayarak gösterin.
+SELECT ROUND(UnitPrice * Quantity, 2) AS 'Toplam Siparis Degeri'
+FROM 'Order Details'
+
+--25)"Products" tablosunda stokta olmayan (UnitsInStock = 0) ürünlerin fiyatlarını toplam fiyat olarak hesaplayın.
+SELECT SUM(unitprice) AS 'TOPLAM FİYAT'
+FROM Products
+WHERE unitsinstock = 0
+
+
+
