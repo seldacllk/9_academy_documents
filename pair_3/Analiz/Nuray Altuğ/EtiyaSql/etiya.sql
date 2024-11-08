@@ -414,7 +414,7 @@ WHERE
 FROM 
   Products 
 WHERE 
-  CategoryID IN (1, 2, 3); -- Kategori ID'lerini buraya yazabilirsiniz.
+  CategoryID IN (1, 2, 3); 
 
 5. SELECT 
   CategoryID, 
