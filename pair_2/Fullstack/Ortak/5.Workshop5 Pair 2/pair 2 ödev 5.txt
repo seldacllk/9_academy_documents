@@ -1,0 +1,472 @@
+--1 
+select product_name , quantity_per_unit from Products
+
+--2
+select product_id , product_name from Products where Discontinued = 0
+
+--3
+select product_id, product_name from Products where Discontinued = 1
+
+--4
+select product_id,product_name,unit_price from  products p where unit_price<20
+
+--5
+select product_id,product_name,unit_price from  products p where unit_price between 15 and 25
+
+--6
+select product_name,units_on_order,units_in_stock from products p 
+inner join order_details od on od.product_id =p.product_id 
+where units_on_order>units_in_stock
+
+--7
+select * from products p where product_name like 'A%'
+
+--8
+select * from products p where product_name like '%i'
+
+--9
+select product_name,unit_price,sum(unit_price*1.18) as unitPriceKdv from products p 
+group by p.product_name,p.unit_price
+
+--10
+select count (unit_price) from products p where unit_price >30
+select *from products p  where unit_price >30
+
+--11
+select lower(product_name),unit_price from products p 
+order by unit_price desc 
+
+--12
+select (e.first_name || ' ' || e.last_name) as EmployeeName from employees e 
+
+--13
+select count(*) from suppliers s where s.region is null 
+
+--14
+select count(*) from suppliers s where s.region notnull 
+
+--15
+select  'TR' || ' ' || upper(product_name) as ProductName from products p 
+
+--16
+select  'TR' || ' ' || upper(product_name) as ProductName
+from products p where unit_price <20
+
+--17
+select product_name,unit_price from products p 
+order by  unit_price desc 
+
+
+--18
+select product_name,unit_price from products p 
+order by  unit_price desc limit 10
+
+--19
+select *from products p
+where unit_price > (select avg(unit_price) from products p2 )
+order by unit_price desc
+
+--20
+select sum(unit_price *units_in_stock) from products p where p.units_in_stock >0
+
+--21
+select count(*) from products p where p.units_in_stock>0 and discontinued ='1'
+
+--22
+select product_name , category_name from products p 
+inner join  categories c on  p.category_id =c.category_id 
+
+--23
+ select  category_name ,avg(unit_price) as Ortalama from products p 
+inner join  categories c on  p.category_id =c.category_id 
+ group by category_name
+
+
+--24
+ select product_name,category_name,unit_price from products p 
+ inner join categories c on p.category_id =c.category_id 
+ order by  unit_price desc limit 1
+
+--25
+ select p.product_name,c.category_name,s.company_name,od.product_id,sum(od.quantity) as SatisAdedi from products p 
+ inner join categories c on p.category_id =c.category_id
+ inner join suppliers s on p.supplier_id =s.supplier_id 
+ inner join order_details od on p.product_id =od.product_id 
+ group by od.product_id ,c.category_name,p.product_name,s.company_name 
+ order by SatisAdedi desc limit 1
+ 
+ --26
+ select product_id,product_name,company_name,phone from products p 
+ inner join suppliers s on p.supplier_id =s.supplier_id  
+ where p.units_in_stock <=0
+ 
+--27
+SELECT address, first_name, last_name,order_date 
+FROM employees e
+INNER JOIN orders o ON e.employee_id = o.employee_id 
+WHERE date_part('year', o.order_date) = 1998 and  date_part('month',o.order_date)=3
+
+--28
+SELECT count(*) from orders o 
+WHERE date_part('year', o.order_date) = 1997 and  date_part('month',o.order_date)=2
+
+--29
+select count(*) from orders o
+WHERE date_part('year', o.order_date) = 1998 and o.ship_city ='London'
+
+--30
+select  distinct contact_name,phone from customers c 
+inner join orders o ON o.customer_id =c.customer_id 
+WHERE date_part('year', o.order_date) = 1997
+
+--31
+select * from orders o
+where freight >= 40
+
+--32
+select city, contact_name from orders o
+inner join customers c on o.customer_id = c.customer_id
+where o.freight >= 40
+
+--33
+select order_date, ship_city, upper(e.first_name || '' || e.last_name) as CalisanAdi
+from orders o
+inner join employees e on o.employee_id = e.employee_id
+where date_part('year', o.order_date) = 1997
+
+--34
+SELECT c.contact_name,REGEXP_REPLACE(phone, '\D', '', 'g') as phoneNumber 
+FROM Customers c
+JOIN Orders o ON c.customer_id = o.customer_id 
+WHERE date_part('year', o.order_date) = 1997
+
+
+--35
+select order_date,  first_name, last_name from orders o
+inner join customers c on o.customer_id = c.customer_id
+inner join employees e on o.employee_id = e.employee_id
+
+--36
+select order_id,required_date,shipped_date
+from orders o
+join customers c on o.customer_id = c.customer_id
+where o.shipped_date > o.required_date 
+
+--37
+select order_id,required_date,shipped_date,contact_name,order_date
+from orders o
+join customers c on o.customer_id = c.customer_id
+where o.shipped_date > o.required_date 
+
+--38
+select product_name,category_name,quantity from products p 
+inner join categories c on p.category_id =c.category_id
+inner join order_details od on p.product_id =od.product_id 
+where order_id=10248
+
+
+--39
+select product_name,company_name from products p 
+inner join suppliers s on p.supplier_id =s.supplier_id 
+inner join order_details od on p.product_id =od.product_id 
+where order_id=10248
+
+
+--40
+
+select first_name,product_name,quantity from orders o 
+inner join employees e on e.employee_id = o.employee_id 
+inner join order_details od on od.order_id =o.order_id 
+inner join products p on p.product_id =od.product_id 
+where e.employee_id =3 and date_part('year', o.order_date) = 1997
+
+
+--41
+select first_name,last_name,o.employee_id,od.quantity from orders o 
+inner join employees e on e.employee_id = o.employee_id 
+inner join order_details od on od.order_id =o.order_id 
+inner join products p on p.product_id =od.product_id 
+where date_part('year', o.order_date) = 1997
+order by  od.quantity  desc limit 1
+
+--42
+select first_name,last_name,o.employee_id,sum(od.quantity) as satisAdedi from orders o 
+inner join employees e on e.employee_id = o.employee_id 
+inner join order_details od on od.order_id =o.order_id 
+inner join products p on p.product_id =od.product_id 
+where date_part('year', o.order_date) = 1997
+GROUP BY 
+    o.employee_id, e.first_name, e.last_name
+ORDER BY 
+    satisAdedi desc LIMIT 1
+
+--43
+ select product_name,unit_price,category_name from products p 
+ inner join categories c ON c.category_id =p.category_id 
+ order by unit_price desc limit 1
+
+--44
+ select first_name,last_name,order_date,order_id from orders o
+ inner join employees e on e.employee_id =o.employee_id 
+ order by order_date desc
+
+--45
+ select avg(od.unit_price*od.quantity),od.order_id,o.order_date from products p 
+ inner join order_details od on od.product_id =p.product_id
+ inner join orders o on o.order_id =od.order_id 
+ group by od.order_id,o.order_date
+ order by o.order_date desc limit 5
+ 
+ --46
+ select product_name,category_name,quantity from products p 
+ inner join order_details od on od.product_id =p.product_id
+  inner join orders o on o.order_id =od.order_id 
+ inner join categories c on c.category_id =p.category_id 
+ where date_part('month', o.order_date) = 1
+ 
+ 
+ --47
+select quantity from order_details od 
+where quantity > (select avg(quantity) from order_details od )
+order by quantity desc
+
+ --48
+
+ select p.product_name,c.category_name,s.company_name,od.product_id,sum(od.quantity) as SatisAdedi from products p 
+ inner join categories c on p.category_id =c.category_id
+ inner join suppliers s on p.supplier_id =s.supplier_id 
+ inner join order_details od on p.product_id =od.product_id 
+ group by od.product_id ,c.category_name,p.product_name,s.company_name 
+ order by SatisAdedi desc limit 1
+ 
+ --49
+select COUNT(distinct country) from customers c 
+
+--50
+select sum(quantity),o.order_date as toplamSatilanAdet from orders o 
+inner join employees e on e.employee_id = o.employee_id 
+inner join order_details od on od.order_id =o.order_id 
+inner join products p on p.product_id =od.product_id 
+where e.employee_id =3  AND o.order_date >= (
+      SELECT MAX(o2.order_date)
+      FROM orders o2
+      WHERE date_part('month', o2.order_date) = 1
+        AND date_part('year', o2.order_date) = (SELECT MAX(date_part('year', order_date)) FROM orders WHERE date_part('month', order_date) = 1)
+  )
+  AND o.order_date <= now() 
+  group by o.order_date -- veya CURRENT_TIMESTAMP
+
+--51
+select product_name,category_name,quantity from products p 
+inner join categories c on p.category_id =c.category_id
+inner join order_details od on p.product_id =od.product_id 
+where order_id=10248
+
+--52
+select product_name,company_name from products p 
+inner join suppliers s on p.supplier_id =s.supplier_id 
+inner join order_details od on p.product_id =od.product_id 
+where order_id=10248
+
+--53
+select first_name,product_name,quantity from orders o 
+inner join employees e on e.employee_id = o.employee_id 
+inner join order_details od on od.order_id =o.order_id 
+inner join products p on p.product_id =od.product_id 
+where e.employee_id =3 and date_part('year', o.order_date) = 1997
+
+--51 - 64 arası benzer old içiin cevaplar yukardadır.
+
+--65
+?
+
+
+--66
+select count(o.order_id) as toplamSiparis,  e.employee_id,e.first_name  from employees e
+left join orders o on e.employee_id = o.employee_id --siparis vermeyen calisanlari da listeleriz
+group by e.employee_id, e.first_name 
+order by toplamSiparis  desc
+
+--67 
+select c.customer_id,c.company_name from customers c
+left join orders o on o.customer_id =c.customer_id 
+where o.order_id is null  
+
+--68
+select c.company_name,c.contact_name,c.address,c.city,c.country  from customers c 
+where country = 'Brazil'
+
+--69
+select c.company_name,c.contact_name,c.address,c.city,c.country  from customers c 
+where country  <> 'Brazil' -- olmayanları listeler
+
+--70
+select c.customer_id ,c.contact_name,c.country  from customers c 
+--where country = 'Spain' OR country = 'France' OR country = 'Germany'
+where country IN ('Spain', 'France', 'Germany')
+
+--71
+select c.customer_id ,c.contact_name,c.country,c.fax  from customers c 
+where c.fax is null
+
+--72
+select c.customer_id ,c.contact_name,c.city from customers c
+where city in('London','Paris')
+
+--73
+select c.customer_id ,c.contact_name,c.city,contact_title from customers c
+where city='México D.F.' and contact_title ='Owner'
+
+--74
+select product_name,unit_price from products p 
+where product_name LIKE 'C%'
+
+--75
+select first_name,last_name,birth_date from employees e 
+where first_name like 'A%' 
+
+--76
+select c.contact_name ,c.company_name  from customers c 
+where company_name like '%Restaurant%'
+
+--77
+select product_name,unit_price from products p 
+where unit_price between 50 and 100
+
+--78
+select o.order_id ,order_date 
+from order_details od 
+inner join orders o on od.order_id = o.order_id 
+where order_date between '1996-07-01' and '1996-12-31'
+
+--79
+select first_name,last_name,company_name, c.country 
+from customers c 
+inner join orders o on o.customer_id =c.customer_id 
+inner join employees e  on e.employee_id  = o.employee_id 
+where c.country = 'France' or  
+c.country = 'Germany' or 
+c.country = 'Spain'
+
+
+--80
+select first_name,last_name,company_name, c.fax  
+from customers c 
+inner join orders o on o.customer_id =c.customer_id 
+inner join employees e  on e.employee_id  = o.employee_id 
+where c.fax is null
+
+--81
+select first_name,last_name,company_name,c.country 
+from customers c 
+inner join orders o on o.customer_id =c.customer_id
+inner join employees e  on e.employee_id  = o.employee_id 
+order by c.country
+
+--82
+select product_name, unit_price 
+from products p 
+order by unit_price desc
+
+--83
+select product_name, unit_price, units_in_stock  
+from products p 
+order by unit_price desc, units_in_stock asc
+
+--84
+select count(*) 
+from products p 
+where p.category_id ='1'
+
+--85
+select count(distinct country) 
+from customers c
+where c.country notnull 
+
+--86
+select distinct country  
+from customers c
+where c.country notnull 
+
+--87
+select product_name,unit_price,category_name from products p 
+inner join categories c ON c.category_id =p.category_id 
+order by unit_price desc limit 5
+
+--88
+select count(quantity)  from customers c
+inner join orders o on o.customer_id =c.customer_id 
+inner join order_details od on od.order_id = o.order_id 
+where c.customer_id = 'ALFKI'
+
+
+--89
+select sum(unit_price*quantity)as toplamMaliyet 
+from order_details od 
+where od.quantity >0
+
+--90
+
+select sum(total) as total_revenue
+from (
+    select order_id, 
+           sum(unit_price * quantity) as subTotal, 
+           od.discount, 
+           sum((unit_price * quantity) - (unit_price * quantity * discount)) as total
+    from order_details od 
+    group by order_id, od.discount, od.product_id 
+    order bt order_id desc
+) as derived_table
+
+
+
+-- 91
+select avg(unit_price) from products p 
+
+--92
+select * from products p 
+order by unit_price desc limit 1
+
+-- 93
+select order_id,SUM((unit_price * quantity) - (unit_price * quantity * discount)) as total from order_details od 
+group by order_id,unit_price,quantity
+order by total desc 
+
+-- 94
+select * from customers c
+order by lenght (c.company_name) desc
+limit 1
+
+-- 95
+select first_name, last_name, age(birth_date) AS age from employees e 
+
+-- 96
+select distinct product_id, SUM(quantity) from order_details od 
+group by product_id
+order by product_id asc
+
+-- 97
+
+select order_id, 
+       sum((unit_price * quantity) - (unit_price * quantity * discount)) AS total
+from order_details
+group by order_id
+order by order_id asc
+
+-- 98
+
+select c.category_name, count(product_id)  from products p 
+inner join categories c on p.category_id = c.category_id 
+group by c.category_name 
+
+-- 99
+select product_id, SUM(quantity) as TotalQuantity  from order_details od 
+group by product_id 
+having  sum(quantity) > 1000
+order by TotalQuantity desc
+
+--100
+select c.company_name
+from customers c
+left join orders o on c.customer_id = o.customer_id
+where o.order_id is null

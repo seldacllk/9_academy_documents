@@ -1,0 +1,135 @@
+-- 101
+select company_name,product_name from products p
+inner join suppliers s ON p.supplier_id = s.supplier_id 
+
+--102. Hangi sipariş hangi kargo şirketi ile ne zaman gönderilmiş..?
+select order_id, s.company_name ,shipped_date from orders o 
+inner join shippers s on o.ship_via = s.shipper_id 
+
+-- 103. Hangi siparişi hangi müşteri verir..?
+select order_id,company_name from orders o 
+inner join customers c on o.customer_id = c.customer_id 
+
+-- 104. Hangi çalışan, toplam kaç sipariş almış..?
+select employee_id, count(order_id)  from orders o 
+group by employee_id 
+order by employee_id 
+
+-- 105. En fazla siparişi kim almış..?
+
+select * from employees e 
+where e.employee_id = 
+(select employee_id from orders o
+group by employee_id 
+order by count(order_id) desc limit 1 
+)
+
+
+-- 106. Hangi siparişi, hangi çalışan, hangi müşteri vermiştir..?
+
+select order_id, company_name as customerName, first_name as employeeName from orders o 
+inner join customers c on o.customer_id = c.customer_id 
+inner join employees e on o.employee_id = o.employee_id 
+order by order_id desc
+
+-- 107 Hangi ürün, hangi kategoride bulunmaktadır..? Bu ürünü kim tedarik etmektedir..?
+
+select product_name, category_name, company_name from products p 
+inner join categories c on p.category_id = c.category_id 
+inner join suppliers s on p.supplier_id = s.supplier_id 
+
+-- 108. Hangi siparişi hangi müşteri vermiş, hangi çalışan almış, hangi tarihte, hangi kargo şirketi tarafından gönderilmiş hangi üründen kaç adet alınmış, 
+-- hangi fiyattan alınmış, ürün hangi kategorideymiş bu ürünü hangi tedarikçi sağlamış
+
+select od.order_id,c.company_name,first_name as employeeName,
+order_date,s.company_name as shipperName,  
+quantity, od.unit_price,c2.category_name,s2.company_name as supplierName  from orders o 
+inner join customers c on o.customer_id = c.customer_id 
+inner join employees e on o.employee_id = e.employee_id 
+inner join shippers s on o.ship_via = s.shipper_id 
+inner join order_details od on o.order_id = od.order_id 
+inner join products p on od.product_id = p.product_id 
+inner join categories c2 on p.category_id = c2.category_id 
+inner join suppliers s2 on p.supplier_id = s2.supplier_id 
+
+
+-- 109. Altında ürün bulunmayan kategoriler
+
+select category_name from products p 
+right join categories c on p.category_id = c.category_id 
+where product_id is null
+
+-- 110 Manager ünvanına sahip tüm müşterileri listeleyiniz.
+select * from customers c 
+where contact_title like '%Manager%'
+
+-- 111. FR ile başlayan 5 karekter olan tüm müşterileri listeleyiniz.
+select * from customers c 
+where contact_name  like 'Fr___'
+
+-- 112. (171) alan kodlu telefon numarasına sahip müşterileri listeleyiniz.
+select company_name , phone  from customers c 
+where phone like '(171)%'
+
+--113. BirimdekiMiktar alanında boxes geçen tüm ürünleri listeleyiniz.
+select * from products p 
+where quantity_per_unit like '%boxes%'
+
+
+--114. Fransa ve Almanyadaki (France,Germany) Müdürlerin (Manager) Adını ve Telefonunu listeleyiniz.(MusteriAdi,Telefon)
+select * from customers c 
+where contact_title like '%Manager%' and (country =  'France' or country = 'Germany')
+
+--115. En yüksek birim fiyata sahip 10 ürünü listeleyiniz.
+select * from products p 
+order by unit_price desc limit 10
+
+-- 116. Müşterileri ülke ve şehir bilgisine göre sıralayıp listeleyiniz.
+select * from customers c 
+order by country,city
+
+-- 117. Personellerin ad,soyad ve yaş bilgilerini listeleyiniz.
+select first_name, last_name, EXTRACT(YEAR FROM age(birth_date)) AS age  from employees e 
+
+-- 118. 35 gün içinde sevk edilmeyen satışları listeleyiniz.
+select * from orders o 
+where (shipped_date  - order_date > 35 )
+
+-- 119. Birim fiyatı en yüksek olan ürünün kategori adını listeleyiniz. (Alt Sorgu)
+select category_name from categories c 
+where c.category_id = (select p.category_id  from products p 
+group by p.category_id
+order by max(p.unit_price) desc limit 1
+)
+
+-- 120. Kategori adında 'on' geçen kategorilerin ürünlerini listeleyiniz. (Alt Sorgu)
+
+select * from products 
+where category_id in
+(select category_id from categories c 
+where category_name like '%on%')
+
+-- 121. Konbu adlı üründen kaç adet satılmıştır.
+select p.product_name ,SUM(od.quantity) from order_details od 
+inner join products p on od.product_id = p.product_id 
+where p.product_name = 'Konbu'
+group by p.product_name 
+
+--122. Japonyadan kaç farklı ürün tedarik edilmektedir.
+select Count(*) from products p 
+inner join suppliers s on p.supplier_id = s.supplier_id 
+where s.country = 'Japan'
+
+--123. 1997 yılında yapılmış satışların en yüksek, en düşük ve ortalama nakliye ücretlisi ne kadardır?
+select max(freight) as enYuksek, min(freight) as enDusuk, avg(freight) as ortalama  from orders o 
+where date_part('YEAR', o.order_date) = 1997 
+
+-- 124. Faks numarası olan tüm müşterileri listeleyiniz.
+select * from customers c 
+where c.fax notnull
+
+--125. 1996-07-16 ile 1996-07-30 arasında sevk edilen satışları listeleyiniz.
+
+select * from orders o 
+where shipped_date between '1996-07-16' and '1996-07-30'
+
