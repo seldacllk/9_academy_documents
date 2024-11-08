@@ -98,7 +98,7 @@
 9.SELECT MIN(OrderDate) AS OldestOrderDate
   FROM Orders;
 
-"Employees" tablosundaki çalışanların kaç yıl önce işe başladıklarını gösteren bir sorgu yazın.
+--"Employees" tablosundaki çalışanların kaç yıl önce işe başladıklarını gösteren bir sorgu yazın.
 10. SELECT EmployeeID, 
        FirstName, 
        LastName, 
@@ -106,59 +106,59 @@
        FLOOR((julianday('now') - julianday(HireDate)) / 365.25) AS YearsEmployed
    FROM Employees;
 
-"OrderDetails" tablosundaki her bir sipariş için, birim fiyatın toplamını yuvarlayarak (ROUND) hesaplayın.
+--"OrderDetails" tablosundaki her bir sipariş için, birim fiyatın toplamını yuvarlayarak (ROUND) hesaplayın.
 11. SELECT OrderID, 
     ROUND(SUM(UnitPrice * Quantity), 0) AS RoundedTotalPrice
     FROM [Order Details]
     GROUP BY OrderID;
 
-"Products" tablosunda stoktaki (UnitsInStock) ürün sayısını gösteren bir COUNT sorgusu yazın.
+--"Products" tablosunda stoktaki (UnitsInStock) ürün sayısını gösteren bir COUNT sorgusu yazın.
 12. SELECT COUNT(*) AS NumberOfProductsInStock
     FROM Products
     WHERE UnitsInStock > 0;
 
-"Products" tablosundaki en düşük ve en yüksek fiyatları hesaplayın.
+--"Products" tablosundaki en düşük ve en yüksek fiyatları hesaplayın.
 13.SELECT MIN(UnitPrice) AS LowestPrice, 
    MAX(UnitPrice) AS HighestPrice
    FROM Products;
 
-"Orders" tablosunda her yıl kaç sipariş alındığını listeleyin (YEAR() fonksiyonunu kullanarak).
+--"Orders" tablosunda her yıl kaç sipariş alındığını listeleyin (YEAR() fonksiyonunu kullanarak).
 14. SELECT strftime('%Y', OrderDate) AS OrderYear, 
        COUNT(*) AS NumberOfOrders
     FROM Orders
     GROUP BY strftime('%Y', OrderDate)
     ORDER BY OrderYear;
 
-"Employees" tablosundaki çalışanların tam adını (FirstName + LastName) birleştirerek gösterin.
+--"Employees" tablosundaki çalışanların tam adını (FirstName + LastName) birleştirerek gösterin.
 15. SELECT FirstName || ' ' || LastName AS FullName
     FROM Employees;
 
-"Customers" tablosundaki şehir adlarının uzunluğunu (LENGTH) hesaplayın.
+--"Customers" tablosundaki şehir adlarının uzunluğunu (LENGTH) hesaplayın.
 16. SELECT City, LENGTH(City) AS CityLength
     FROM Customers;
 
-"Products" tablosundaki her ürünün fiyatını iki ondalık basamağa yuvarlayarak gösterin.
+--"Products" tablosundaki her ürünün fiyatını iki ondalık basamağa yuvarlayarak gösterin.
 17. SELECT ProductID, 
        ProductName, 
        ROUND(UnitPrice, 2) AS RoundedPrice
     FROM Products;
 
-"Orders" tablosundaki tüm siparişlerin toplam sayısını bulun.
+--"Orders" tablosundaki tüm siparişlerin toplam sayısını bulun.
 18. SELECT COUNT(*) AS TotalOrders
     FROM Orders;
 
-"Products" tablosunda her kategorideki (CategoryID) ürünlerin ortalama fiyatını (AVG) hesaplayın.
+--"Products" tablosunda her kategorideki (CategoryID) ürünlerin ortalama fiyatını (AVG) hesaplayın.
 19. SELECT CategoryID, 
        AVG(UnitPrice) AS AveragePrice
     FROM Products
     GROUP BY CategoryID;
 
-"Orders" tablosunda sevk tarihi (ShippedDate) boş olan siparişlerin yüzdesini (COUNT ve toplam sipariş sayısını kullanarak) hesaplayın.
+--"Orders" tablosunda sevk tarihi (ShippedDate) boş olan siparişlerin yüzdesini (COUNT ve toplam sipariş sayısını kullanarak) hesaplayın.
 20. SELECT 
     (COUNT(CASE WHEN ShippedDate IS NULL THEN 1 END) * 100.0 / COUNT(*)) AS PercentageUnshipped
     FROM Orders;
 
-"Products" tablosundaki en pahalı ürünün fiyatını bulun ve bir fonksiyon kullanarak fiyatı 10% artırın.
+--"Products" tablosundaki en pahalı ürünün fiyatını bulun ve bir fonksiyon kullanarak fiyatı 10% artırın.
 21.SELECT ProductName, 
        UnitPrice AS OriginalPrice, 
        ROUND(UnitPrice * 1.10, 2) AS PriceIncreased
@@ -166,12 +166,12 @@
    ORDER BY UnitPrice DESC
    LIMIT 1;
 
-"Products" tablosundaki ürün adlarının ilk 3 karakterini gösterin (SUBSTRING).
+--"Products" tablosundaki ürün adlarının ilk 3 karakterini gösterin (SUBSTRING).
 22. SELECT ProductName, 
     substr(ProductName, 1, 3) AS FirstThreeChars
     FROM Products;
 
-"Orders" tablosunda verilen siparişlerin yıl ve ay bazında kaç sipariş alındığını hesaplayın (YEAR ve MONTH fonksiyonları).
+--"Orders" tablosunda verilen siparişlerin yıl ve ay bazında kaç sipariş alındığını hesaplayın (YEAR ve MONTH fonksiyonları).
 23.SELECT strftime('%Y', OrderDate) AS OrderYear, 
        strftime('%m', OrderDate) AS OrderMonth, 
        COUNT(*) AS NumberOfOrders
@@ -179,14 +179,14 @@
    GROUP BY strftime('%Y', OrderDate), strftime('%m', OrderDate)
    ORDER BY OrderYear, OrderMonth;
 
-"OrderDetails" tablosunda toplam sipariş değerini (UnitPrice * Quantity) hesaplayıp, bu değeri iki ondalık basamağa yuvarlayarak gösterin.
+--"OrderDetails" tablosunda toplam sipariş değerini (UnitPrice * Quantity) hesaplayıp, bu değeri iki ondalık basamağa yuvarlayarak gösterin.
 24. SELECT OrderID, 
        ROUND(SUM(UnitPrice * Quantity), 2) AS TotalOrderValue
     FROM [Order Details]
     GROUP BY OrderID;
 
 
-"Products" tablosunda stokta olmayan (UnitsInStock = 0) ürünlerin fiyatlarını toplam fiyat olarak hesaplayın.
+--"Products" tablosunda stokta olmayan (UnitsInStock = 0) ürünlerin fiyatlarını toplam fiyat olarak hesaplayın.
 25. SELECT ROUND(SUM(UnitPrice), 2) AS TotalStockValue
     FROM Products
     WHERE UnitsInStock = 0;
