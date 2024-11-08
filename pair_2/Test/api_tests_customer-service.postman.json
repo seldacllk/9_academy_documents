@@ -1,0 +1,2569 @@
+{
+	"info": {
+		"_postman_id": "b61e4cb8-80ef-4c62-ba8b-a0eca3eabbbe",
+		"name": "customer-service",
+		"description": "This collection is created for testing of the \"customer-service\" that developped by Pair 2.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31426991",
+		"_collection_link": "https://asd000-9899.postman.co/workspace/EAT9-P2-CRM~c67b8a21-561a-409b-bda4-0e32813c2287/collection/31426991-b61e4cb8-80ef-4c62-ba8b-a0eca3eabbbe?action=share&source=collection_link&creator=31426991"
+	},
+	"item": [
+		{
+			"name": "customers",
+			"item": [
+				{
+					"name": "create customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.customerId).to.exist;\r",
+									"  pm.expect(responseData.nationalityId).to.exist;\r",
+									"  pm.expect(responseData.firstName).to.exist;\r",
+									"  pm.expect(responseData.middleName).to.exist;\r",
+									"  pm.expect(responseData.lastName).to.exist;\r",
+									"  pm.expect(responseData.gender).to.exist;\r",
+									"  pm.expect(responseData.birthday).to.exist;\r",
+									"  pm.expect(responseData.motherName).to.exist;\r",
+									"  pm.expect(responseData.fatherName).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate customer properties\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"\r",
+									"    const propertiesToCheck = [\r",
+									"        'customerId', 'nationalityId', 'firstName', 'middleName', 'lastName', 'gender', 'birthday', 'motherName', 'fatherName'\r",
+									"    ];\r",
+									"\r",
+									"    propertiesToCheck.forEach(property => {\r",
+									"        pm.expect(responseData[property]).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, `${property} should be a non-empty string`);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.environment.set(\"createdCustID\", jsonData.customerId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomId = Math.floor(10000000000 + Math.random() * 90000000000);\r",
+									"pm.environment.set(\"randomId\", randomId.toString());\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nationalityId\": \"{{randomId}}\",\n  \"firstName\": \"{{randomName}}\",\n  \"middleName\": \"midname\",\n  \"lastName\": \"{{randomName}}\",\n  \"gender\": \"Male\",\n  \"birthday\": \"1999-01-01\",\n  \"motherName\": \"mothername\",\n  \"fatherName\": \"fathername\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/individualCustomers/create",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"individualCustomers",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the content type application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body is an empty array\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify the response array is of the correct length\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    pm.expect(responseData).to.have.lengthOf(0, \"Array should be of length 0\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Check if the response array contains only valid individual customer objects\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function(customer) {",
+									"        pm.expect(customer).to.be.an('object');",
+									"        pm.expect(customer).to.have.property('id');",
+									"        pm.expect(customer).to.have.property('name');",
+									"        pm.expect(customer).to.have.property('email');",
+									"        pm.expect(customer).to.have.property('phone');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": \"{{createdCustID}}\",\n    \"firstName\": \"test\",\n    \"middleName\": \"\",\n    \"lastName\": \"user\",\n    \"gender\": \"male\",\n    \"birthday\": null,\n    \"motherName\": \"\",\n    \"fatherName\": \"\",\n    \"nationalityId\": \"\",\n    \"status\": false,\n    \"contactMediumList\": [],\n    \"addressList\": [],\n    \"billingAccountList\": []\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/individualCustomers/search",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"individualCustomers",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find customer by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response content type is application/json\", function () {",
+									"  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.include.all.keys('customerId', 'firstName', 'lastName', 'gender', 'motherName', 'fatherName', 'nationalityId', 'status');",
+									"});",
+									"",
+									"",
+									"pm.test(\"ContactMediumList, AddressList, and BillingAccountList arrays are present and empty\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.contactMediumList).to.be.an('array').that.is.empty;",
+									"  pm.expect(responseData.addressList).to.be.an('array').that.is.empty;",
+									"  pm.expect(responseData.billingAccountList).to.be.an('array').that.is.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Gender is a valid value (e.g., Male, Female, Other)\", function () {",
+									"    const validGenders = [\"Male\", \"Female\", \"Other\"];",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.gender).to.exist.and.to.be.oneOf(validGenders);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/individualCustomers/search/{{createdCustID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"individualCustomers",
+								"search",
+								"{{createdCustID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.customerId).to.exist;",
+									"  pm.expect(responseData.nationalityId).to.exist;",
+									"  pm.expect(responseData.firstName).to.exist;",
+									"  pm.expect(responseData.middleName).to.exist;",
+									"  pm.expect(responseData.lastName).to.exist;",
+									"  pm.expect(responseData.gender).to.exist;",
+									"  pm.expect(responseData.birthday).to.exist;",
+									"  pm.expect(responseData.motherName).to.exist;",
+									"  pm.expect(responseData.fatherName).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"CustomerId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.customerId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CustomerId should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"NationalityId should be a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.nationalityId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Birthday is either null or in a valid date format\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.birthday).to.satisfy((value) => {",
+									"        return value === null || !isNaN(Date.parse(value));",
+									"    }, \"Birthday should be either null or in a valid date format\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fatherName\": \"fathername\",\n  \"gender\": \"female\",\n  \"motherName\": \"motherName\",\n  \"customerId\": \"{{createdCustID}}\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/individualCustomers/update",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"individualCustomers",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get customer by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData).to.have.property('customerId');",
+									"  pm.expect(responseData).to.have.property('firstName');",
+									"  pm.expect(responseData).to.have.property('lastName');",
+									"  pm.expect(responseData).to.have.property('gender');",
+									"  pm.expect(responseData).to.have.property('birthday');",
+									"  pm.expect(responseData).to.have.property('motherName');",
+									"  pm.expect(responseData).to.have.property('fatherName');",
+									"  pm.expect(responseData).to.have.property('nationalityId');",
+									"  pm.expect(responseData).to.have.property('status');",
+									"});",
+									"",
+									"",
+									"pm.test(\"ContactMediumList, AddressList, and BillingAccountList are present and empty arrays\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.contactMediumList).to.be.an('array').and.to.be.empty;",
+									"    pm.expect(responseData.addressList).to.be.an('array').and.to.be.empty;",
+									"    pm.expect(responseData.billingAccountList).to.be.an('array').and.to.be.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Gender is a valid value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.gender).to.exist.and.to.be.oneOf(['male', 'female']);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/individualCustomers/{{createdCustID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"individualCustomers",
+								"{{createdCustID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - customerId and status\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.customerId).to.exist;\r",
+									"    pm.expect(responseData.status).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Customer ID must be a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.customerId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Customer ID should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status is a boolean value\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.status).to.be.a('boolean');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/individualCustomers/deactivate?id={{createdCustID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"individualCustomers",
+								"deactivate"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{createdCustID}}",
+									"description": "(Required) "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify the response schema for required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    ",
+									"    responseData.forEach(customer => {",
+									"        pm.expect(customer.customerId).to.exist.and.to.be.a('string');",
+									"        pm.expect(customer.firstName).to.exist.and.to.be.a('string');",
+									"        pm.expect(customer.lastName).to.exist.and.to.be.a('string');",
+									"        pm.expect(customer.gender).to.exist.and.to.be.a('string');",
+									"        pm.expect(customer.birthday).to.exist;",
+									"        pm.expect(customer.motherName).to.exist.and.to.be.a('string');",
+									"        pm.expect(customer.fatherName).to.exist.and.to.be.a('string');",
+									"        pm.expect(customer.nationalityId).to.exist.and.to.be.a('string');",
+									"        pm.expect(customer.status).to.exist.and.to.be.a('boolean');",
+									"        pm.expect(customer.contactMediumList).to.exist.and.to.be.an('array');",
+									"        pm.expect(customer.addressList).to.exist.and.to.be.an('array');",
+									"        pm.expect(customer.billingAccountList).to.exist.and.to.be.an('array');",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/individualCustomers/getAll",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"individualCustomers",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contact-medium",
+			"item": [
+				{
+					"name": "create contact medium",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('customerId');",
+									"    pm.expect(responseData).to.have.property('email');",
+									"    pm.expect(responseData).to.have.property('homePhone');",
+									"    pm.expect(responseData).to.have.property('mobilePhone');",
+									"    pm.expect(responseData).to.have.property('fax');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.email).to.be.a('string');",
+									"    pm.expect(responseData.email).to.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$/i, \"Email format is invalid\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Home phone and mobile phone are in valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    ",
+									"    if(responseData.homePhone) {",
+									"        pm.expect(responseData.homePhone).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"    }",
+									"",
+									"    if(responseData.mobilePhone) {",
+									"        pm.expect(responseData.mobilePhone).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"    }",
+									"});",
+									"",
+									"",
+									"pm.test(\"Fax is either empty or in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.fax).to.satisfy((fax) => {",
+									"        return fax === \"\" || /^[0-9]{10}$/.test(fax);",
+									"    }, \"Fax should be either empty or a 10-digit number\");",
+									"});",
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"createdContactID\", jsonData.id);",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": \"c1cc32fc-9f4a-4845-9af4-1cf10a3e4772\",\n  \"email\": \"FPuMq@0B0UMfG.CtsCqOZfiLxP\",\n  \"mobilePhone\": \"5555555555\",\n  \"homePhone\": \"\",\n  \"fax\": \"\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/contactMediums/create",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"contactMediums",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get contact medium by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData).to.have.property('customerId');",
+									"  pm.expect(responseData).to.have.property('email');",
+									"  pm.expect(responseData).to.have.property('homePhone');",
+									"  pm.expect(responseData).to.have.property('mobilePhone');",
+									"  pm.expect(responseData).to.have.property('fax');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.email).to.be.a('string');",
+									"    pm.expect(responseData.email).to.match(/\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b/, \"Email is not in a valid format\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Phone numbers are in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    ",
+									"    const phoneNumbers = ['homePhone', 'mobilePhone', 'fax'];",
+									"    phoneNumbers.forEach(function(phone) {",
+									"        if(responseData[phone]) {",
+									"            pm.expect(responseData[phone]).to.be.a('string').and.to.match(/^\\d{10}$/);",
+									"        }",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/contactMediums/{{createdContactID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"contactMediums",
+								"{{createdContactID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update contact medium",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData).to.have.property('customerId');",
+									"  pm.expect(responseData).to.have.property('email');",
+									"  pm.expect(responseData).to.have.property('homePhone');",
+									"  pm.expect(responseData).to.have.property('mobilePhone');",
+									"  pm.expect(responseData).to.have.property('fax');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.email).to.be.a('string');",
+									"    pm.expect(responseData.email).to.match(/\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b/, \"Email should be in a valid format\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"HomePhone, mobilePhone, and fax are in valid phone number formats\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.homePhone).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"    pm.expect(responseData.mobilePhone).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"    pm.expect(responseData.fax).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"testuser@test.com\",\n  \"mobilePhone\": \"5551231234\",\n  \"homePhone\": \"\",\n  \"fax\": \"\",\n  \"id\": \"{{createdContactID}}\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/contactMediums/update",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"contactMediums",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete contact medium",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - id and customerId\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('customerId');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Id is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"CustomerId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.customerId).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/contactMediums/delete?id={{createdContactID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"contactMediums",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{createdContactID}}",
+									"description": "(Required) "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all contact mediums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - id, customerId, email, homePhone, mobilePhone, and fax\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(item => {",
+									"        pm.expect(item).to.have.property('id');",
+									"        pm.expect(item).to.have.property('customerId');",
+									"        pm.expect(item).to.have.property('email');",
+									"        pm.expect(item).to.have.property('homePhone');",
+									"        pm.expect(item).to.have.property('mobilePhone');",
+									"        pm.expect(item).to.have.property('fax');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    responseData.forEach(function(item) {",
+									"        pm.expect(item.email).to.be.a('string').and.to.match(/\\S+@\\S+\\.\\S+/);",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Home phone number is in valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    responseData.forEach(function(contactMedium) {",
+									"        if (contactMedium.homePhone) {",
+									"            pm.expect(contactMedium.homePhone).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"        }",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Mobile phone number is in valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    responseData.forEach(function(contactMedium) {",
+									"        if (contactMedium.mobilePhone) {",
+									"            pm.expect(contactMedium.mobilePhone).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"        }",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Fax number is in valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    responseData.forEach(function(contactMedium) {",
+									"        if (contactMedium.fax) {",
+									"            pm.expect(contactMedium.fax).to.match(/^\\d{3}-\\d{3}-\\d{4}$/);",
+									"        }",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/contactMediums/getAll",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"contactMediums",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "billing acc",
+			"item": [
+				{
+					"name": "create billing account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate the response schema for the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.id).to.exist;\r",
+									"    pm.expect(responseData.customerId).to.exist;\r",
+									"    pm.expect(responseData.addressId).to.exist;\r",
+									"    pm.expect(responseData.description).to.exist;\r",
+									"    pm.expect(responseData.accountName).to.exist;\r",
+									"    pm.expect(responseData.accountNumber).to.exist;\r",
+									"    pm.expect(responseData.accountStatus).to.exist;\r",
+									"    pm.expect(responseData.accountType).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountName\": \"accName\",\n    \"accountNumber\": \"accNo\",\n    \"accountType\": \"Billing Account\",\n    \"addressId\": \"998177a8-56dc-4a75-b3d8-754bd305609d\",\n    \"customerId\": \"f00cd426-a707-4fc5-88da-2a378e28a559\",\n    \"description\": \"addressDescription\",\n    \"action\": \"\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/billingAccounts/create",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"billingAccounts",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get billing account by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response content type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('customerId');",
+									"    pm.expect(responseData).to.have.property('accountNumber');",
+									"    pm.expect(responseData).to.have.property('accountStatus');",
+									"    pm.expect(responseData).to.have.property('action');",
+									"    pm.expect(responseData).to.have.property('accountName');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Account status is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.accountStatus).to.be.a('boolean');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/billingAccounts/0b7aacd9-4093-42cb-838d-3b65dd9bd90c",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"billingAccounts",
+								"0b7aacd9-4093-42cb-838d-3b65dd9bd90c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update billing account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.id).to.exist;",
+									"  pm.expect(responseData.customerId).to.exist;",
+									"  pm.expect(responseData.addressId).to.exist;",
+									"  pm.expect(responseData.description).to.exist;",
+									"  pm.expect(responseData.accountName).to.exist;",
+									"  pm.expect(responseData.accountNumber).to.exist;",
+									"  pm.expect(responseData.accountStatus).to.exist;",
+									"  pm.expect(responseData.accountType).to.exist;",
+									"  pm.expect(responseData.action).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Customer ID should not be empty\", function () {",
+									"  const responseData = pm.response.json();",
+									"  pm.expect(responseData.customerId).to.exist.and.to.not.be.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Account number is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.accountNumber).to.be.a('string').and.to.match(/^\\d{4}-\\d{4}-\\d{4}$/);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Account status is a boolean value\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.accountStatus).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"0b7aacd9-4093-42cb-838d-3b65dd9bd90c\",\n  \"customerId\": \"c1cc32fc-9f4a-4845-9af4-1cf10a3e4772\",\n  \"addressId\": \"8b2ea741-39a0-442c-928f-a89121a554ad\",\n  \"description\": \"updatedDescription\",\n  \"accountName\": \"updatedAccName\",\n  \"accountNumber\": \"updatedAccNo\",\n  \"accountType\": \"Billing Account\",\n  \"accountStatus\": true,\n  \"action\": \"\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/billingAccounts/update",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"billingAccounts",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete billing account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Presence of id and customerId fields in the response schema\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('id');\r",
+									"    pm.expect(responseData).to.have.property('customerId');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/billingAccounts/delete?id={{createdBillingAccID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"billingAccounts",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{createdBillingAccID}}",
+									"description": "(Required) "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all billing accounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response content type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Array should be empty\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/billingAccounts/getAll",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"billingAccounts",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "addresses",
+			"item": [
+				{
+					"name": "cities",
+					"item": [
+						{
+							"name": "create city",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = pm.response.json();\r",
+											"pm.environment.set(\"createdCityID\", jsonData.id);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"{{randomName}}\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/cities/create",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"cities",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get city by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.expect(pm.response.code).to.equal(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.name).to.exist;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Name is a non-empty string\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Verify the response contains the expected customer ID\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/cities/{{createdCityID}}",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"cities",
+										"{{createdCityID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update city",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": \"{{createdCityID}}\",\n  \"name\": \"{{randomName}}\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/cities/update",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"cities",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get All cities",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.expect(pm.response.code).to.equal(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - id and name\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('array');",
+											"    responseData.forEach(function(city) {",
+											"        pm.expect(city).to.be.an('object');",
+											"        pm.expect(city).to.have.property('id');",
+											"        pm.expect(city).to.have.property('name');",
+											"    });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Id is a non-empty string\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  responseData.forEach(function(city) {",
+											"    pm.expect(city.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should be a non-empty string\");",
+											"  });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Name is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('array');",
+											"    responseData.forEach(function(city) {",
+											"        pm.expect(city.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+											"    });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type header is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/cities/getAll",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"cities",
+										"getAll"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete city",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.expect(pm.response.code).to.equal(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - id and name\", function () {",
+											"  const responseData = pm.response.json();",
+											"",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData).to.have.property('id');",
+											"  pm.expect(responseData).to.have.property('name');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Id and name must be non-empty strings\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should not be empty\");",
+											"    pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Id format is a valid UUID\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.id).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/, \"Id should be a valid UUID format\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/cities/delete?id={{createdCityID}}",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"cities",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{createdCityID}}",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "districts",
+					"item": [
+						{
+							"name": "create district",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - id, cityId, and name\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('id');",
+											"    pm.expect(responseData).to.have.property('cityId');",
+											"    pm.expect(responseData).to.have.property('name');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Id is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should be a non-empty string\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"CityId should be a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.cityId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CityId should be a non-empty string\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Name is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+											"});",
+											"const jsonData = pm.response.json();",
+											"pm.environment.set(\"createdDistrictID\", jsonData.id);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"cityId\": \"da853405-a7af-4ddb-8f38-a1ff033e537b\",\n  \"name\": \"{{randomName}}\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/districts/create",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"districts",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update district",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - id, cityId, and name\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('id');",
+											"    pm.expect(responseData).to.have.property('cityId');",
+											"    pm.expect(responseData).to.have.property('name');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Id and cityId must be non-empty strings\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should be a non-empty string\");",
+											"  pm.expect(responseData.cityId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CityId should be a non-empty string\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Name is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type header is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": \"{{createdDistrictID}}\",\n  \"cityId\": \"da853405-a7af-4ddb-8f38-a1ff033e537b\",\n  \"name\": \"{{randomName}}\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/districts/update",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"districts",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get districts From City",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - id and name\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+											"    ",
+											"    responseData.forEach(function(item) {",
+											"        pm.expect(item).to.have.property('id');",
+											"        pm.expect(item).to.have.property('name');",
+											"    });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Id is a non-empty string\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('array');",
+											"  responseData.forEach(function(item) {",
+											"    pm.expect(item.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should not be empty\");",
+											"  });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Name is a non-empty string\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('array');",
+											"  responseData.forEach(function(item) {",
+											"    pm.expect(item.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+											"  });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type is application/json\", function () {",
+											"  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/districts/getCityId/da853405-a7af-4ddb-8f38-a1ff033e537b",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"districts",
+										"getCityId",
+										"da853405-a7af-4ddb-8f38-a1ff033e537b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get By Id district",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/districts/getById/{{createdDistrictID}}",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"districts",
+										"getById",
+										"{{createdDistrictID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete district",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/districts/delete?id={{createdDistrictID}}",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"districts",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{createdDistrictID}}",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all districts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - id, cityId, and name\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('array');",
+											"    responseData.forEach(function(item) {",
+											"        pm.expect(item).to.have.property('id');",
+											"        pm.expect(item).to.have.property('cityId');",
+											"        pm.expect(item).to.have.property('name');",
+											"    });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Id and cityId should be non-empty strings\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('array');",
+											"  responseData.forEach(function(district) {",
+											"    pm.expect(district.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should be a non-empty string\");",
+											"    pm.expect(district.cityId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CityId should be a non-empty string\");",
+											"  });",
+											"});",
+											"",
+											"",
+											"pm.test(\"CityId is in a valid format\", function () {",
+											"    const responseData = pm.response.json();",
+											"",
+											"    pm.expect(responseData).to.be.an('array');",
+											"    responseData.forEach(function(district) {",
+											"        pm.expect(district.cityId).to.match(/[A-Za-z0-9]+/);",
+											"    });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Name is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    responseData.forEach(function(item) {",
+											"        pm.expect(item.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{customer_service}}/api/v1/customer/districts/getAll",
+									"host": [
+										"{{customer_service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer",
+										"districts",
+										"getAll"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.id).to.exist;",
+									"  pm.expect(responseData.customerId).to.exist;",
+									"  pm.expect(responseData.districtId).to.exist;",
+									"  pm.expect(responseData.postalCode).to.exist;",
+									"  pm.expect(responseData.description).to.exist;",
+									"  pm.expect(responseData.flatNumber).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Postal code is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.postalCode).to.match(/^\\d{5}(?:[-\\s]\\d{4})?$/, \"Postal code should be in a valid format\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"District ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.districtId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"District ID should not be empty\");",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"createdAddressID\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"addressDescription2\",\n  \"postalCode\": \"77635\",\n  \"customerId\": \"c1cc32fc-9f4a-4845-9af4-1cf10a3e4772\",\n  \"districtId\": \"89b7a03c-5fe6-4636-9157-ab856a90fa0b\",\n  \"flatNumber\": \"flatNumber\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/addresses/create",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"addresses",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.include.all.keys('id', 'customerId', 'districtId', 'postalCode', 'description', 'flatNumber');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Postal code is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.postalCode).to.match(/^\\d{5}(?:[-\\s]\\d{4})?$/);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Flat number must be a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.flatNumber).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Flat number should be a non-empty string\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"District ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.districtId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"District ID should be a non-empty string\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"updatedDescription\",\n    \"postalCode\": \"18710\",\n    \"id\": \"{{createdAddressID}}\",\n    \"customerId\": \"0551661f-26f3-481b-bd89-0185d7251cc4\",\n    \"districtId\": \"89b7a03c-5fe6-4636-9157-ab856a90fa0b\",\n    \"flatNumber\": \"updatedFlatNo\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/addresses/update",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"addresses",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get address by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/addresses/{{createdAddressID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"addresses",
+								"{{createdAddressID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - id, customerId, and districtId\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('customerId');",
+									"    pm.expect(responseData).to.have.property('districtId');",
+									"});",
+									"",
+									"",
+									"pm.test(\"AccountStatus should be null or empty\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.accountStatus).to.satisfy((value) => {",
+									"        return value === null || value === \"\";",
+									"    }, \"AccountStatus should be null or empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Id, customerId, and districtId are non-empty strings\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should not be empty\");",
+									"    pm.expect(responseData.customerId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"customerId should not be empty\");",
+									"    pm.expect(responseData.districtId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"districtId should not be empty\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/addresses/delete?id={{createdAddressID}}",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"addresses",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{createdAddressID}}",
+									"description": "(Required) "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all adresses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function(address) {",
+									"        pm.expect(address).to.have.property('id');",
+									"        pm.expect(address).to.have.property('customerId');",
+									"        pm.expect(address).to.have.property('districtId');",
+									"        pm.expect(address).to.have.property('postalCode');",
+									"        pm.expect(address).to.have.property('description');",
+									"        pm.expect(address).to.have.property('flatNumber');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Id, customerId, districtId, and postalCode are non-empty strings\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    ",
+									"    responseData.forEach(function(address) {",
+									"        pm.expect(address.id).to.be.a('string').and.to.have.lengthOf.at.least(1);",
+									"        pm.expect(address.customerId).to.be.a('string').and.to.have.lengthOf.at.least(1);",
+									"        pm.expect(address.districtId).to.be.a('string').and.to.have.lengthOf.at.least(1);",
+									"        pm.expect(address.postalCode).to.be.a('string').and.to.have.lengthOf.at.least(1);",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Description and flatNumber are optional and can be empty\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function(address) {",
+									"        pm.expect(address).to.be.an('object');",
+									"        pm.expect(address.description).to.exist.or.to.be.empty;",
+									"        pm.expect(address.flatNumber).to.exist.or.to.be.empty;",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{customer_service}}/api/v1/customer/addresses/getAll",
+							"host": [
+								"{{customer_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customer",
+								"addresses",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"function generateRandomName(length) {\r",
+					"    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';\r",
+					"    let result = '';\r",
+					"    for (let i = 0; i < length; i++) {\r",
+					"        result += characters.charAt(Math.floor(Math.random() * characters.length));\r",
+					"    }\r",
+					"    return result;\r",
+					"}\r",
+					"const randomName = generateRandomName(Math.floor(Math.random() * 6) + 5); \r",
+					"pm.environment.set(\"randomName\", randomName);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
