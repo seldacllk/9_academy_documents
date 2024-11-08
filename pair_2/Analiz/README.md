@@ -12,3 +12,6 @@ You cand find all documents realted to Analysis.
 | Presentation | [Pptx](https://etiyacorp-my.sharepoint.com/:p:/r/personal/fatmanur_bilke_etiya_com/_layouts/15/doc2.aspx?sourcedoc=%7B969CE6DB-3613-48E3-9BB2-0905E70ED2E5%7D&file=ppt_template_2024.pptx&action=edit&mobileredirect=true&wdOrigin=TEAMS-MAGLEV.p2p_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1730631079558&web=1&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiIxNDE1LzI0MTAwMzI0OTE2IiwiSGFzRmVkZXJhdGVkVXNlciI6ZmFsc2V9) |
 | Shift Jira | [Jira](https://shift.etiya.com/login.jsp?permissionViolation=true&os_destination=%2Fbrowse%2FEAT-5461&page_caps=&user_role=) |
 | Api Doc | [Document](https://goofy-waterlily-fe5.notion.site/ETIYA-Academy-9-P2-API-Documentation-129434950e78808aa706e76eb37eb925) |
+| Tunahan Çetin SQL Work | [Github](https://github.com/tarantuna/EtiyaSQL) |
+| Mehmet Ekin Taburoğlu SQL Work | [Github](https://github.com/ekintaburoglu) |
+| Fatmanur Bilke SQL Work | [Github](https://github.com/fatmanurbilke?tab=repositories) |
