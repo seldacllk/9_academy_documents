@@ -1,0 +1,24 @@
+Customer Search
+
+Test Plan:
+https://shift.etiya.com/browse/EAT-5637
+
+Customer Search Test Set:
+https://shift.etiya.com/browse/EAT-5803
+
+Test Cases:
+TC001:https://shift.etiya.com/browse/EAT-5806
+TC002:https://shift.etiya.com/browse/EAT-5820
+TC003:https://shift.etiya.com/browse/EAT-5821
+TC004:https://shift.etiya.com/browse/EAT-5823
+TC005:https://shift.etiya.com/browse/EAT-5826
+TC006:https://shift.etiya.com/browse/EAT-5827
+TC007:https://shift.etiya.com/browse/EAT-5828
+TC008:https://shift.etiya.com/browse/EAT-5829
+TC009:https://shift.etiya.com/browse/EAT-5830
+TC010:https://shift.etiya.com/browse/EAT-5831
+
+
+
+
+
