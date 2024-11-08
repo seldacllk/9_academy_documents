@@ -1,5 +1,5 @@
 ## Common Documents
-You cand find all documents that we worked together.
+You can find all documents that we have worked together.
 
 | Document | Link |
 | ------ | ------ |
