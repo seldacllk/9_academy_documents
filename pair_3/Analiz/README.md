@@ -1,3 +1,5 @@
+See more about documents by clicking on related document name listed below.
+
 | Documents |
 |   ---  | 
 | [SRS Document](https://github.com/seldacllk/9_academy_documents/blob/main/pair_3/Analiz/pair3_srs_document_10102024.pdf)|
