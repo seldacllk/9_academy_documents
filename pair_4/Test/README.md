@@ -7,4 +7,6 @@
 - **Main Development Repository:** [Development Repo Link](https://github.com/etiya-9-pair4/telco-crm-pair4)
 - **Presentation:** [EtiyaAcademy9-Pair4_CRM_Project_2024](https://github.com/seldacllk/9_academy_documents/blob/main/pair_4/Test/EtiyaAcademy9-Pair4_CRM_Project_2024.pptx)
 
+- **Selenium Workshop:** https://github.com/dilaragebess/testWorkshops
+
 
