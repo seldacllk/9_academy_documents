@@ -1,0 +1,322 @@
+{
+	"info": {
+		"_postman_id": "05e7c890-fe16-4741-a123-b4b491f06281",
+		"name": "pair_3_JSONPlaceholder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39054911"
+	},
+	"item": [
+		{
+			"name": "comments",
+			"item": [
+				{
+					"name": "successfulgetall",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{commentsURL}}",
+							"host": [
+								"{{commentsURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "successfulpostcomment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"postId\": 777,\r\n    \"name\": \"balık ayhan\",\r\n    \"email\": \"pair3@pair.biz\",\r\n    \"body\": \"CRM\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{commentsURL}}",
+							"host": [
+								"{{commentsURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "putsuccessfulkobramurat",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 3,\r\n    \"name\": \"kobra murat\",\r\n    \"email\": \"Nikita@garfield.biz\",\r\n    \"body\": \"quia molestiae reprehenderit quasi aspernatur\\naut expedita occaecati aliquam eveniet laudantium\\nomnis quibusdam delectus saepe quia accusamus maiores nam est\\ncum et ducimus et vero voluptates excepturi deleniti ratione\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{commentsURL}}/1",
+							"host": [
+								"{{commentsURL}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "successfulldeletecomment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{commentsURL}}/10",
+							"host": [
+								"{{commentsURL}}"
+							],
+							"path": [
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "successfulpatchbodychange",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"body\": \"dsfxgchvbjknlcdhfgvbjhnkxcgvhbjnkml\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{commentsURL}}/1",
+							"host": [
+								"{{commentsURL}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "GET success all /posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/posts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST success one added /posts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 11,\r\n    \"title\": \"pair_3\",\r\n    \"body\": \"pair_3 content\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/posts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT success updated id 2 /posts",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"pair999999\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/posts/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"posts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE success deleted id 3 /posts",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/posts/userId=3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"posts",
+								"userId=3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET failed nonexist userId = 899 /posts - response 200 OK but it shouldn't",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/posts?userId=899",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "899"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "albums",
+			"item": [
+				{
+					"name": "GET success all/albums",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{albumsURL}}",
+							"host": [
+								"{{albumsURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST success one added /albums",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 690,\r\n    \"title\": \"Delta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{albumsURL}}",
+							"host": [
+								"{{albumsURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT success new album added / albums",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 1,\r\n    \"title\": \"Cem Karaca - Nem Kaldı?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{albumsURL}}/2",
+							"host": [
+								"{{albumsURL}}"
+							],
+							"path": [
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE success deleted id=2",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{albumsURL}}/2",
+							"host": [
+								"{{albumsURL}}"
+							],
+							"path": [
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
