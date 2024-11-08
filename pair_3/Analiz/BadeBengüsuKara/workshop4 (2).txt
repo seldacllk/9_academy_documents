@@ -1,0 +1,139 @@
+--1    En Pahalı Ürünü Getirin
+select productid,productname,unitprice from Products
+where unitprice=(select max(unitprice) from Products)
+--2   En Son Verilen Siparişi Bulun
+select orderid,orderdate,employeeid from Orders
+where orderdate=(select max(orderdate) from Orders)
+--3   Fiyatı Ortalama Fiyattan Yüksek Olan Ürünleri Getirin
+select productid,productname,unitprice,categoryid from Products
+where unitprice> (select avg(unitprice) from Products)
+--4  Belirli Kategorilerdeki Ürünleri Listeleyin
+select productid,productname,categoryid from Products
+where categoryid in 
+(select categoryid from Categories where categoryname in ('Dairy Products','Meat/Poultry','Produce'))
+--5  En Yüksek Fiyatlı Ürünlere Sahip Kategorileri Listeleyin
+SELECT CA.CategoryID,CA.CategoryName FROM Categories AS CA WHERE CA.CategoryID IN 
+(SELECT P.CategoryID FROM Products AS P ORDER BY P.UnitPrice DESC LIMIT 5)
+--6  Bir Ülkedeki Müşterilerin Verdiği Siparişleri Listeleyin
+select CU.customerid,CU.companyname, O.orderid,O.orderdate,CU.Country FROM Orders AS O
+JOIN Customers AS CU
+WHERE CU.Country = 'Italy'
+--7  Her Kategori İçin Ortalama Fiyatın Üzerinde Olan Ürünleri Listeleyin
+SELECT P.productid,P.productname,P.UnitPrice,CA.categoryid,CA.categoryname from Products AS P RIGHT JOIN
+Categories AS CA ON CA.CategoryID=P.CategoryID
+WHERE P.UnitPrice > (SELECT AVG(unitprice) FROM Products AS P2 WHERE P2.CategoryID=P.CategoryID)
+--8  Her Müşterinin En Son Verdiği Siparişi Listeleyin
+SELECT O.customerid, O.orderid, O.orderdate 
+FROM Orders AS O JOIN 
+    (SELECT customerid, MAX(orderdate) AS LatestOrderDate 
+     FROM Orders 
+     GROUP BY customerid) AS Q
+ON O.customerid = Q.customerid AND O.orderdate = Q.LatestOrderDate
+--9   Her Çalışanın Kendi Departmanındaki Ortalama Maaşın Üzerinde Maaş Alıp Almadığını Bulun
+--IF THERE WERE SALARY COLUMNS
+SELECT E.employeeid, CONCAT(E.FirstName,E.LastName),
+CASE 
+	WHEN E.SALARY > T.SALARY THEN 'ABOVE AVG.'
+    WHEN E.SALARY<T.SALARY THEN 'BELOW AVG.'
+    ELSE 'EQUAL'
+END AS SALARYSTATUS
+FROM Employees AS E JOIN (SELECT title,AVG(SALARY) FROM Employees GROUP BY title) AS T
+ON T.title=E.Title
+-------
+--BASED ON ORDER NUMBER AVERAGE
+SELECT O.EmployeeID, 
+    CASE
+        WHEN COUNT(O.OrderID) > 
+             (SELECT AVG(OrderCount) 
+              FROM (SELECT EmployeeID, COUNT(OrderID) AS OrderCount 
+                    FROM Orders 
+                    GROUP BY EmployeeID) AS EmployeeOrders) 
+        THEN 'above average'
+        ELSE 'below average'
+    END AS OrderStatus
+FROM Orders AS O GROUP BY O.EmployeeID;
+
+
+--10  En Az 10 Ürün Satın Alınan Siparişleri Listeleyin
+SELECT OD.OrderID FROM Orders AS O JOIN OrderDetails AS OD
+ON O.OrderID=OD.OrderID GROUP BY OD.OrderID
+HAVING SUM(quantity)>10
+--11  Her Kategoride En Pahalı Olan Ürünlerin Ortalama Fiyatını Bulun
+SELECT AVG(expensive) as 'Average Price' from (select MAX(Products.UnitPrice) AS expensive FROM Products group by Products.CategoryID)
+--12  Müşterilerin Verdiği Toplam Sipariş Sayısına Göre Sıralama Yapın
+select customerid,COUNT(orderid) from Orders group by customerid
+order by COUNT(orderid) DESC
+--13  En Fazla Sipariş Vermiş 5 Müşteriyi ve Son Sipariş Tarihlerini Listeleyin
+SELECT c.CustomerID,
+    c.CompanyName,
+    (SELECT MAX(o2.OrderDate) FROM Orders o2 WHERE o2.CustomerID = c.CustomerID) AS SonSiparisTarihi,
+    COUNT(*) AS ToplamSiparisSayisi
+FROM Customers c
+INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerID, c.CompanyName
+ORDER BY ToplamSiparisSayisi DESC
+LIMIT 5;
+--14  Toplam Ürün Sayısı 15'ten Fazla Olan Kategorileri Listeleyin
+select CA.categoryid,CA.categoryname,count(P.ProductID) from Categories AS CA
+JOIN Products AS P ON P.CategoryID=CA.CategoryID
+group by CA.categoryid,CA.categoryname
+having count(P.ProductID) >15
+--15  En Fazla 5 Farklı Ürün Sipariş Eden Müşterileri Listeleyin
+SELECT O.CustomerID
+FROM Orders AS O
+JOIN OrderDetails AS OD ON O.OrderID = OD.OrderID
+GROUP BY O.CustomerID
+HAVING COUNT(DISTINCT OD.ProductID) > 5;
+--16  20'den Fazla Ürün Sağlayan Tedarikçileri Listeleyin
+SELECT supplierid FROM Products
+GROUP BY supplierid
+HAVING COUNT(productid)>20
+--17   Her Müşteri İçin En Pahalı Ürünü Bulun
+SELECT O.CustomerID, OD.ProductID, OD.UnitPrice
+FROM Orders AS O
+JOIN OrderDetails AS OD ON O.OrderID = OD.OrderID
+WHERE OD.UnitPrice = (SELECT MAX(OD2.UnitPrice) FROM Orders AS O2
+JOIN OrderDetails AS OD2 ON O2.OrderID = OD2.OrderID
+WHERE O2.CustomerID = O.CustomerID)
+--18   10.000'den Fazla Sipariş Değeri Olan Çalışanları Listeleyin
+SELECT employeeid,COUNT(orderid)
+FROM Orders
+GROUP BY employeeid
+HAVING COUNT(orderid)>1800
+--19  Kategorisine Göre En Çok Sipariş Edilen Ürünü Bulun
+SELECT P.CategoryID, P.ProductID, SUM(OD.Quantity) AS TotalSales
+FROM Products AS P JOIN OrderDetails AS OD ON P.ProductID = OD.ProductID
+GROUP BY P.CategoryID, P.ProductID
+HAVING SUM(OD.Quantity) = (
+SELECT MAX(Sales) FROM (
+        SELECT SUM(OD2.Quantity) AS Sales
+        FROM Products AS P2
+        JOIN OrderDetails AS OD2 ON P2.ProductID = OD2.ProductID
+        WHERE P2.CategoryID = P.CategoryID
+        GROUP BY P2.ProductID
+    ) AS SalesData
+)ORDER BY P.CategoryID;
+
+--20  Müşterilerin En Son Sipariş Verdiği Ürün ve Tarihlerini Listeleyin
+SELECT O.CustomerID,O.OrderDate,OD.ProductID FROM Orders AS O
+JOIN OrderDetails AS OD ON OD.OrderID=O.OrderID
+WHERE O.OrderDate=(SELECT MAX(O2.orderdate) FROM Orders AS O2 WHERE O2.CustomerID=O.CustomerID group by O2.CustomerID)
+ORDER BY O.CustomerID
+--21  Her Çalışanın Teslim Ettiği En Pahalı Siparişi ve Tarihini Listeleyin
+SELECT O.EmployeeID, O.OrderDate, (OD.UnitPrice *SUM( OD.Quantity)) AS TotalPrice
+FROM Orders AS O JOIN OrderDetails AS OD ON O.OrderID = OD.OrderID
+GROUP BY O.EmployeeID, O.OrderID, O.OrderDate
+HAVING SUM(OD.UnitPrice * OD.Quantity) = (
+SELECT MAX(TotalOrderValue) FROM (SELECT  O2.OrderID, SUM(OD2.UnitPrice * OD2.Quantity) AS TotalOrderValue
+FROM  Orders AS O2 JOIN OrderDetails AS OD2 ON O2.OrderID = OD2.OrderID
+WHERE O2.EmployeeID = O.EmployeeID GROUP BY O2.OrderID) AS OrderTotals)
+ORDER BY O.EmployeeID;
+--22  En Fazla Sipariş Verilen Ürünü ve Bilgilerini Listeleyin
+SELECT productid, productname, unitprice, unitsinstock 
+FROM Products AS P
+WHERE productid = (
+    SELECT OD.ProductID
+    FROM OrderDetails AS OD
+    GROUP BY OD.ProductID
+    ORDER BY SUM(OD.Quantity) DESC
+    LIMIT 1)
