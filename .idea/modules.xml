@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/9_academy_documents.iml" filepath="$PROJECT_DIR$/.idea/9_academy_documents.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pair_2/Test/Enes Yurtcu/Enes Yurtcu.iml" filepath="$PROJECT_DIR$/pair_2/Test/Enes Yurtcu/Enes Yurtcu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pair_2/Test/Enes Yurtcu/Selenium Homework/Selenium Homework.iml" filepath="$PROJECT_DIR$/pair_2/Test/Enes Yurtcu/Selenium Homework/Selenium Homework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pair_2/Test/Enes Yurtcu/Selenium Workshop/Selenium Workshop.iml" filepath="$PROJECT_DIR$/pair_2/Test/Enes Yurtcu/Selenium Workshop/Selenium Workshop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pair_1/pair_1.iml" filepath="$PROJECT_DIR$/pair_1/pair_1.iml" />
+    </modules>
+  </component>
+</project>

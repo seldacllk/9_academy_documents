@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Test">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/pair_1/Test/yusuf-korukcu-sql-main.zip!/" />
+      <root url="jar://$PROJECT_DIR$/pair_1/Test/Etiya.sql-main.zip!/" />
+      <root url="jar://$PROJECT_DIR$/pair_1/Test/NeslihanAydinWorkshops.zip!/" />
+      <root url="jar://$PROJECT_DIR$/pair_1/Test/FatihBayrakEtiyaWorkshops.zip!/" />
+      <root url="jar://$PROJECT_DIR$/pair_1/Test/yunus-kose-sql-main.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
