@@ -1,0 +1,23 @@
+SELECT * FROM Products WHERE supplierid BETWEEN 1 AND 5
+
+Select * FROM Products WHERE supplierid In(1,2,4,5)
+
+SELECT * FROM Products WHERE productname= 'Chang' OR productname= 'Aniseed Syrup'
+
+SELECT * FROM Products WHERE supplierid= 3 OR unitprice>10
+
+SELECT productname, unitprice FROM Products
+
+SELECT * FROM Products WHERE UPPER(productname) LIKE 'C%';
+
+SELECT * FROM products WHERE productname LIKE 'n%' 
+  AND LENGTH(REPLACE(productname, 'n', '')) = LENGTH(productname) - 1;
+
+
+SELECT * FROM Products WHERE unitsinstock = 50
+
+
+SELECT * FROM Products WHERE unitprice = (SELECT MAX(unitprice) FROM products)
+   OR unitprice = (SELECT MIN(unitprice) FROM products)
+   
+ SELECT * FROM Products WHERE productname LIKE '%Spice%'
