@@ -2,11 +2,11 @@
 # Aslı Sema Gültekin
 
 ## GitHub
-- [HW1](https://github.com/AsliSema/etiya-fs-homework-1)
-- [HW2](https://github.com/AsliSema/etiya-fs-homework2)
-- [HW3](https://github.com/AsliSema/etiya-html-hw)
-- [HW4](https://github.com/AsliSema/etiya-angular-hw)
-- [HW5](https://github.com/AsliSema/etiya-angular-hw-2)
+- [Assignment 1](https://github.com/AsliSema/etiya-fs-homework-1)
+- [Assignment 2](https://github.com/AsliSema/etiya-fs-homework2)
+- [Assignment 3](https://github.com/AsliSema/etiya-html-hw)
+- [Assignment 4](https://github.com/AsliSema/etiya-angular-hw)
+- [Assignment 5](https://github.com/AsliSema/etiya-angular-hw-2)
 
 ## Medium Yazıları
 - [Exploring APIs and Data Formats: RESTful APIs, XML, and JSON](https://medium.com/@aslisemagultekin/exploring-apis-and-data-formats-restful-apis-xml-and-json-fa0992470236)
